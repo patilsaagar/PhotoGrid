@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		58A82BF72B4DA8820097E5EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82BF62B4DA8820097E5EA /* AppDelegate.swift */; };
 		58A82BF92B4DA8820097E5EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82BF82B4DA8820097E5EA /* SceneDelegate.swift */; };
-		58A82BFB2B4DA8820097E5EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82BFA2B4DA8820097E5EA /* ViewController.swift */; };
+		58A82BFB2B4DA8820097E5EA /* PhotoGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82BFA2B4DA8820097E5EA /* PhotoGridViewController.swift */; };
 		58A82C002B4DA8830097E5EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58A82BFF2B4DA8830097E5EA /* Assets.xcassets */; };
 		58A82C0E2B4DA8840097E5EA /* PhotoGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C0D2B4DA8840097E5EA /* PhotoGridTests.swift */; };
 		58A82C182B4DA8840097E5EA /* PhotoGridUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */; };
@@ -40,7 +40,7 @@
 		58A82BF32B4DA8820097E5EA /* PhotoGrid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotoGrid.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A82BF62B4DA8820097E5EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58A82BF82B4DA8820097E5EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		58A82BFA2B4DA8820097E5EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		58A82BFA2B4DA8820097E5EA /* PhotoGridViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewController.swift; sourceTree = "<group>"; };
 		58A82BFF2B4DA8830097E5EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58A82C042B4DA8830097E5EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58A82C092B4DA8840097E5EA /* PhotoGridTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoGridTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,7 +149,7 @@
 		58A82C282B4DA9860097E5EA /* View */ = {
 			isa = PBXGroup;
 			children = (
-				58A82BFA2B4DA8820097E5EA /* ViewController.swift */,
+				58A82BFA2B4DA8820097E5EA /* PhotoGridViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -300,7 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				58A82C2C2B4DA9D70097E5EA /* Photo.swift in Sources */,
-				58A82BFB2B4DA8820097E5EA /* ViewController.swift in Sources */,
+				58A82BFB2B4DA8820097E5EA /* PhotoGridViewController.swift in Sources */,
 				58A82C2F2B4DAA020097E5EA /* NetworkManager.swift in Sources */,
 				58A82BF72B4DA8820097E5EA /* AppDelegate.swift in Sources */,
 				58A82BF92B4DA8820097E5EA /* SceneDelegate.swift in Sources */,
