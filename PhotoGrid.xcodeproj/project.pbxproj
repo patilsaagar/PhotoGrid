@@ -14,6 +14,9 @@
 		58A82C0E2B4DA8840097E5EA /* PhotoGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C0D2B4DA8840097E5EA /* PhotoGridTests.swift */; };
 		58A82C182B4DA8840097E5EA /* PhotoGridUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */; };
 		58A82C1A2B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */; };
+		58A82C2C2B4DA9D70097E5EA /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C2B2B4DA9D70097E5EA /* Photo.swift */; };
+		58A82C2F2B4DAA020097E5EA /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C2E2B4DAA020097E5EA /* NetworkManager.swift */; };
+		58A82C322B4DAA2D0097E5EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C312B4DAA2D0097E5EA /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,9 @@
 		58A82C132B4DA8840097E5EA /* PhotoGridUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoGridUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridUITests.swift; sourceTree = "<group>"; };
 		58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		58A82C2B2B4DA9D70097E5EA /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		58A82C2E2B4DAA020097E5EA /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		58A82C312B4DAA2D0097E5EA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,9 +101,13 @@
 		58A82BF52B4DA8820097E5EA /* PhotoGrid */ = {
 			isa = PBXGroup;
 			children = (
+				58A82C302B4DAA220097E5EA /* Constants */,
+				58A82C2D2B4DA9EB0097E5EA /* NetworkManager */,
+				58A82C262B4DA9710097E5EA /* Model */,
+				58A82C282B4DA9860097E5EA /* View */,
+				58A82C272B4DA97F0097E5EA /* ViewModel */,
 				58A82BF62B4DA8820097E5EA /* AppDelegate.swift */,
 				58A82BF82B4DA8820097E5EA /* SceneDelegate.swift */,
-				58A82BFA2B4DA8820097E5EA /* ViewController.swift */,
 				58A82BFF2B4DA8830097E5EA /* Assets.xcassets */,
 				58A82C042B4DA8830097E5EA /* Info.plist */,
 			);
@@ -119,6 +129,45 @@
 				58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */,
 			);
 			path = PhotoGridUITests;
+			sourceTree = "<group>";
+		};
+		58A82C262B4DA9710097E5EA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				58A82C2B2B4DA9D70097E5EA /* Photo.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		58A82C272B4DA97F0097E5EA /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		58A82C282B4DA9860097E5EA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				58A82BFA2B4DA8820097E5EA /* ViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		58A82C2D2B4DA9EB0097E5EA /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				58A82C2E2B4DAA020097E5EA /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		58A82C302B4DAA220097E5EA /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				58A82C312B4DAA2D0097E5EA /* Constants.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,9 +299,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58A82C2C2B4DA9D70097E5EA /* Photo.swift in Sources */,
 				58A82BFB2B4DA8820097E5EA /* ViewController.swift in Sources */,
+				58A82C2F2B4DAA020097E5EA /* NetworkManager.swift in Sources */,
 				58A82BF72B4DA8820097E5EA /* AppDelegate.swift in Sources */,
 				58A82BF92B4DA8820097E5EA /* SceneDelegate.swift in Sources */,
+				58A82C322B4DAA2D0097E5EA /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
