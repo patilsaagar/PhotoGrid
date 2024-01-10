@@ -39,8 +39,13 @@ class PhotoGridViewModel {
     func getTodaysDate() -> String {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Constants.dateFormat
+        dateFormatter.dateFormat = StringConstants.dateFormat
 
         return dateFormatter.string(from: todaysDate)
+    }
+    
+    func prefetchandCacheImage(url: URL) async throws -> Data {
+        let fetchedImage: Data = try await networkFetcher.fetchData(from: url.absoluteString)
+        return fetchedImage
     }
 }

@@ -20,7 +20,7 @@ class FullPhotoViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(ViewControllerInitializationErrorConstants.error)
+        fatalError(StringConstants.fatalError)
     }
     
     override func viewDidLoad() {

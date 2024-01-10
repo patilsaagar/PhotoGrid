@@ -15,14 +15,15 @@ class PhotoGridViewController: UIViewController {
     private let imageCache: ImageCache
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.minimumInteritemSpacing = Constants.minimumInteritemSpacing
-        flowLayout.minimumLineSpacing = Constants.minimumLineSpacing
+        flowLayout.minimumInteritemSpacing = NumberConstants.minimumInteritemSpacing
+        flowLayout.minimumLineSpacing = NumberConstants.minimumLineSpacing
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.prefetchDataSource = self
+        collectionView.isPrefetchingEnabled = true
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
         
         return collectionView
@@ -31,7 +32,7 @@ class PhotoGridViewController: UIViewController {
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: Constants.titleLabelFontSize)
+        label.font = UIFont.boldSystemFont(ofSize: NumberConstants.titleLabelFontSize)
         label.textAlignment = .left
         
         return label
@@ -47,7 +48,7 @@ class PhotoGridViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError(ViewControllerInitializationErrorConstants.error)
+        fatalError(StringConstants.fatalError)
     }
     
     // MARK: - Lifecycle methods
@@ -95,7 +96,7 @@ extension PhotoGridViewController {
     
     private func handleError(error: Error) {
         
-        let alertController = UIAlertController(title: AlertConstants.title, 
+        let alertController = UIAlertController(title: AlertConstants.title,
                                                 message: AlertConstants.messageBody,
                                                 preferredStyle: .alert)
         
@@ -145,7 +146,7 @@ extension PhotoGridViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegateFlowLayout methods
 extension PhotoGridViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cellWidth = (collectionView.bounds.width - Constants.photoWidth)  / Constants.photoGridColumnCount
+        let cellWidth = (collectionView.bounds.width - NumberConstants.photoWidth)  / NumberConstants.photoGridColumnCount
         return CGSize(width: cellWidth, height: cellWidth)
     }
 }
@@ -156,7 +157,7 @@ extension PhotoGridViewController: UICollectionViewDelegate {
         let photo = photoViewModel.photoAtIndex(indexPath.row)
         let fullPhotoViewController = FullPhotoViewController(photo: photo, imageCache: imageCache)
         
-        self.navigationController?.pushViewController(fullPhotoViewController, animated: false)
+        self.navigationController?.pushViewController(fullPhotoViewController, animated: true)
     }
 }
 
@@ -166,39 +167,34 @@ extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
         let visibleIndexPaths = collectionView.indexPathsForVisibleItems
         
         for indexPath in indexPaths {
-            guard indexPath.row < photoViewModel.numberOfPhotos() else { return }
+            guard indexPath.row < photoViewModel.numberOfPhotos() else { continue }
             
             let photo = photoViewModel.photoAtIndex(indexPath.row)
-            let downloadURL = URL(string: photo.downloadURL)
+            guard let downloadURL = URL(string: photo.downloadURL) else { continue }
             
-            if let downloadURL = downloadURL {
-                if let cachedImage = imageCache.image(for: downloadURL) {
-                    (collectionView.cellForItem(at: indexPath) as? PhotoCell)?.photoGridImageView.image = cachedImage
-                } else {
-                    guard visibleIndexPaths.contains(indexPath) else { continue }
+            Task {
+                do {
+                    let prefetchedImageData = try await photoViewModel.prefetchandCacheImage(url: downloadURL)
+                    guard let image = UIImage(data: prefetchedImageData) else {
+                        throw NetworkError.invalidImageData
+                    }
+                    let thumbnailImage = image.resizedImage(withPercentage: NumberConstants.imageResizePercentage)
                     
-                    Task {
-                        do {
-                            let (data, _) = try await URLSession.shared.data(from: downloadURL)
-                            let image = UIImage(data: data)!
-                            let thumbnailImage = image.resizedImage(withPercentage: Constants.imageResizePercentage)
-                            
-                            DispatchQueue.main.async {
-                                if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
-                                   visibleIndexPaths.contains(indexPath) {
-                                    cell.photoGridImageView.image = thumbnailImage
-                                    self.imageCache.setImage(thumbnailImage!, for: downloadURL)
-                                }
-                            }
-                        } catch {
-                            let badServerResponseError = URLError(.badServerResponse)
-                            self.handleError(error: badServerResponseError)
+                    DispatchQueue.main.async {
+                        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
+                           visibleIndexPaths.contains(indexPath) {
+                            cell.photoGridImageView.image = thumbnailImage
+                            self.imageCache.setImage(thumbnailImage!, for: downloadURL)
+                            cell.isUserInteractionEnabled = true
                         }
                     }
+                } catch {
+                    throw NetworkError.badServerResponse
                 }
             }
         }
     }
 }
+
 
 
