@@ -116,7 +116,7 @@ extension PhotoGridViewController {
     
     private func fetchAndReloadData()  async {
         await photoViewModel.fetchPhotos()
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.collectionView.reloadData()
         }
     }
