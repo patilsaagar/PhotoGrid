@@ -42,7 +42,7 @@ final class NetworkManagerTests: XCTestCase {
         mockURLSession.mockData = data
         
         // Act
-        let receivedData:[MockData] =  try await networkManager.fetchData(from: APIConstants.endpoint)
+        let receivedData:[MockData] =  try await networkManager.makeHttpRequest(from: APIConstants.endpoint)
         
         // Assert
         XCTAssertEqual(receivedData.count, 2)

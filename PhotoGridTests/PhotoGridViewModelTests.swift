@@ -29,7 +29,7 @@ class MockNetworkFetcher: NetworkFetchable {
         self.mockData = mockData
     }
     
-    func fetchData<T: Decodable>(from url: String) async throws -> T {
+    func makeHttpRequest<T: Decodable>(from url: String) async throws -> T {
         fetchDataCallCount += 1
 
         let decodedData = try JSONDecoder().decode(T.self, from: mockData)
@@ -67,7 +67,7 @@ final class PhotoGridViewModelTests: XCTestCase {
         var receivedError: Error?
         
         
-        _ = photoGridViewModel.photoPublisher
+        let cancellable = photoGridViewModel.photoPublisher
             .sink { completion in
                 switch completion {
                 case .finished:
@@ -88,8 +88,10 @@ final class PhotoGridViewModelTests: XCTestCase {
         await XCTestCase().fulfillment(of: [expectation], timeout: 5)
         XCTAssertNil(receivedError)
         XCTAssertNotNil(receivedPhoto)
-        XCTAssertEqual(2, receivedPhoto?.count)
+        XCTAssertEqual(receivedPhoto?.count, photoGridViewModel.numberOfPhotos())
         XCTAssertEqual(mockNetworkFetcher.getFetchDataCallCount(), 1)
+        
+        cancellable.cancel()
     }
     
     func testNumberOfPhotos() async throws {
@@ -115,5 +117,17 @@ final class PhotoGridViewModelTests: XCTestCase {
         XCTAssertEqual(photo.id, "1")
         XCTAssertEqual(photo.author, "Auther1")
         XCTAssertEqual(photo.downloadURL, "https://picsum.photos/id/0/5000/3333")
+    }
+    
+    func testGetTodaysDate() {
+        
+        // Arrange
+        let photoGridViewModel = PhotoGridViewModel(networkFetcher: mockNetworkFetcher, todaysDate: Date(timeIntervalSince1970: 0))
+        
+        // Act
+        let todaysDate = photoGridViewModel.getTodaysDate()
+        
+        // Assert
+        XCTAssertEqual(todaysDate, "Jan 1, 1970")
     }
 }

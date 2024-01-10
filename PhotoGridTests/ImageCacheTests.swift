@@ -12,13 +12,13 @@ import Combine
 final class ImageCacheTests: XCTestCase {
     
     private var imageCache: ImageCache!
-    
+
     override func setUp() {
         super.setUp()
         imageCache = ImageCache()
     }
     
-    func testSetImage() async throws {
+    func testSetImageWhenImageIsAvailable() async throws {
     
         // Arrange
         guard let url = URL(string: "https://picsum.photos/id/0/5000/3333") else { return }
