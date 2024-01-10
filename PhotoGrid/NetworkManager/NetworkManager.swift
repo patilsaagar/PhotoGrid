@@ -9,7 +9,10 @@ import Foundation
 
 enum NetworkError : Error {
     case jsonDecodingError(Error)
+    case responseFetchError(Error)
     case invalidURL
+    case invalidImageData
+    case badServerResponse
 }
 
 protocol URLSessionProtocol {
@@ -20,6 +23,7 @@ extension URLSession: URLSessionProtocol {}
 
 protocol NetworkFetchable {
     func makeHttpRequest<T: Decodable>(from endpointURL: String) async throws -> T
+    func fetchData(from endpointURL: String) async throws -> Data
 }
 
 class NetworkManager: NetworkFetchable {
@@ -41,6 +45,19 @@ class NetworkManager: NetworkFetchable {
                 return response
         } catch {
             throw NetworkError.jsonDecodingError(error)
+        }
+    }
+    
+    func fetchData(from endpointURL: String) async throws -> Data {
+        guard let url =  URL(string: endpointURL) else {
+            throw NetworkError.invalidURL
+        }
+        
+        do {
+            let (responseData, _) = try await urlSession.data(from: url)
+            return responseData
+        } catch {
+            throw NetworkError.responseFetchError(error)
         }
     }
 }
