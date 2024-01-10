@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class PhotoGridViewController: UIViewController {
     
@@ -18,6 +19,7 @@ class PhotoGridViewController: UIViewController {
         static let photoWidth: CGFloat                                 = 20
     }
     
+    // MARK: - Private Variables
     private var photoViewModel: PhotoGridViewModel
     private let imageCache: ImageCache
     private lazy var collectionView: UICollectionView = {
@@ -34,6 +36,9 @@ class PhotoGridViewController: UIViewController {
         return collectionView
     }()
     
+    private var cancellable = Set<AnyCancellable>()
+    
+    // MARK: - Init methods
     init(photoViewModel: PhotoGridViewModel, imageCache: ImageCache) {
         self.photoViewModel = photoViewModel
         self.imageCache = imageCache
@@ -41,20 +46,53 @@ class PhotoGridViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(ViewControllerInitializationErrorConstants.error)
     }
     
+    // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(collectionView)
-        self.navigationController?.navigationBar.backgroundColor = .white
-        self.navigationController?.navigationItem.title = "dasd"
         setCollectionViewConstraint()
+        
+        setupPhotoSubsciber()
         
         Task {
             await fetchAndReloadData()
         }
+    }
+}
+
+// MARK: - Private methods
+extension PhotoGridViewController {
+    
+    private func setupPhotoSubsciber() {
+        
+        photoViewModel.photoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                switch result {
+                case .finished:
+                    break;
+                case .failure(let error):
+                    self?.handleError(error: error)
+                }
+            } receiveValue: { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellable)
+    }
+    
+    private func handleError(error: Error) {
+        
+        let alertController = UIAlertController(title: AlertConstants.title, 
+                                                message: AlertConstants.messageBody,
+                                                preferredStyle: .alert)
+        
+        alertController.addAction(UIAlertAction(title: AlertConstants.okButton, style: .default, handler: nil))
+        present(alertController, animated: true)
+        
     }
     
     private func setCollectionViewConstraint() {
@@ -74,6 +112,7 @@ class PhotoGridViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource methods
 extension PhotoGridViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoViewModel.numberOfPhotos()
@@ -112,28 +151,29 @@ extension PhotoGridViewController: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDataSourcePrefetching methods
 extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let visibleIndexPaths = collectionView.indexPathsForVisibleItems
-
+        
         for indexPath in indexPaths {
             guard indexPath.row < photoViewModel.numberOfPhotos() else { return }
-
+            
             let photo = photoViewModel.photoAtIndex(indexPath.row)
             let downloadURL = URL(string: photo.downloadURL)
-
+            
             if let downloadURL = downloadURL {
                 if let cachedImage = imageCache.image(for: downloadURL) {
                     (collectionView.cellForItem(at: indexPath) as? PhotoCell)?.imageView.image = cachedImage
                 } else {
                     guard visibleIndexPaths.contains(indexPath) else { continue }
-
+                    
                     Task {
                         do {
                             let (data, _) = try await URLSession.shared.data(from: downloadURL)
                             let image = UIImage(data: data)!
                             let thumbnailImage = image.resizedImage(withPercentage: Constants.imageResizePercentage)
-
+                            
                             DispatchQueue.main.async {
                                 if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
                                    visibleIndexPaths.contains(indexPath) {
@@ -142,6 +182,8 @@ extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
                                 }
                             }
                         } catch {
+                            let badServerResponseError = URLError(.badServerResponse)
+                            self.handleError(error: badServerResponseError)
                         }
                     }
                 }

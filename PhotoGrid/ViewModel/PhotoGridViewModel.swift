@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import Combine
 
 class PhotoGridViewModel {
     private let networkFetcher:  NetworkFetchable
     private var photos: [Photo] = []
+    var photoPublisher = PassthroughSubject<[Photo], Error>()
 
     init(networkFetcher: NetworkFetchable) {
         self.networkFetcher = networkFetcher
@@ -18,8 +20,9 @@ class PhotoGridViewModel {
     func fetchPhotos() async {
         do {
             photos = try await networkFetcher.fetchData()
+            photoPublisher.send(photos)
         } catch {
-            
+            photoPublisher.send(completion: .failure(error))
         }
     }
     
