@@ -19,7 +19,7 @@ enum AlertConstants {
 
 enum NumberConstants {
     static let minimumInteritemSpacing: CGFloat         = 5
-    static let imageResizePercentage: CGFloat           = 0.01
+    static let imageResizePercentage: CGFloat           = 0.09
     static let photoGridColumnCount: CGFloat             = 3
     static let minimumLineSpacing: CGFloat                 = 5
     static let photoWidth: CGFloat                                 = 20
