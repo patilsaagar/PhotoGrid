@@ -30,3 +30,7 @@ enum Constants {
     static let titleLabelFontSize: CGFloat                       = 25
     static let dateFormat = "MMM d, yyyy"
 }
+
+enum AccessibilityConstants {
+    static let fullImageView         = "FullImageView"
+}

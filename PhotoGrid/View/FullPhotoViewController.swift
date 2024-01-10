@@ -8,10 +8,10 @@
 import UIKit
 
 class FullPhotoViewController: UIViewController {
-
+    
     private let photo: Photo
     private let imageCache: ImageCache
-    private var imageView = UIImageView()
+    private var fullImageView = UIImageView()
     
     init(photo: Photo, imageCache: ImageCache) {
         self.photo = photo
@@ -26,14 +26,20 @@ class FullPhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        imageView = UIImageView(frame: view.bounds)
-        imageView.contentMode = .scaleAspectFit
-        view.addSubview(imageView)
+        setFullImageView()
+        view.addSubview(fullImageView)
         view.backgroundColor = .white
         
         if let url = URL(string: photo.downloadURL),
            let cachedImage = imageCache.image(for: url) {
-            imageView.image = cachedImage
+            fullImageView.image = cachedImage
         }
+    }
+    
+    private func setFullImageView() {
+        fullImageView = UIImageView(frame: view.bounds)
+        fullImageView.contentMode = .scaleAspectFit
+        fullImageView.accessibilityIdentifier = AccessibilityConstants.fullImageView
+        fullImageView.isAccessibilityElement = true
     }
 }
