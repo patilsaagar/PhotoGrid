@@ -180,7 +180,7 @@ extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
                     }
                     let thumbnailImage = image.resizedImage(withPercentage: NumberConstants.imageResizePercentage)
                     
-                    DispatchQueue.main.async {
+                    await MainActor.run {
                         if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
                            visibleIndexPaths.contains(indexPath) {
                             cell.photoGridImageView.image = thumbnailImage
