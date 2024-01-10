@@ -12,19 +12,35 @@ enum NetworkError : Error {
     case invalidURL
 }
 
+protocol URLSessionProtocol {
+    func data(from url: URL) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: URLSessionProtocol {}
+
 protocol NetworkFetchable {
-    func fetchData() async throws -> [Photo]
+    func fetchData<T: Decodable>(from url: String) async throws -> T
 }
 
 class NetworkManager: NetworkFetchable {
     
-    func fetchData() async throws -> [Photo] {
-        guard let url =  URL(string: APIConstants.endpoint) else {
+    private var urlSession: URLSessionProtocol
+    
+    init(urlSession: URLSessionProtocol) {
+        self.urlSession = urlSession
+    }
+    
+    func fetchData<T: Decodable>(from url: String) async throws -> T {
+        guard let url =  URL(string: url) else {
             throw NetworkError.invalidURL
         }
         
-        let (responseData, _) = try await URLSession.shared.data(from: url)
-            let response = try JSONDecoder().decode([Photo].self, from: responseData)
-            return response
+        do {
+            let (responseData, _) = try await urlSession.data(from: url)
+                let response = try JSONDecoder().decode(T.self, from: responseData)
+                return response
+        } catch {
+            throw NetworkError.jsonDecodingError(error)
+        }
     }
 }

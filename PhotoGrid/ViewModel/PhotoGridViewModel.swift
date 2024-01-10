@@ -19,7 +19,7 @@ class PhotoGridViewModel {
     
     func fetchPhotos() async {
         do {
-            photos = try await networkFetcher.fetchData()
+            photos = try await networkFetcher.fetchData(from: APIConstants.endpoint)
             photoPublisher.send(photos)
         } catch {
             photoPublisher.send(completion: .failure(error))
