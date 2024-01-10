@@ -57,7 +57,7 @@ final class NetworkManagerTests: XCTestCase {
         networkManager = NetworkManager(urlSession: mockURLSession)
     }
     
-    func testFetchDataSuccess() async throws {
+    func testMakeHttpRequestSuccess() async throws {
         // Arrange
         let mockDataFirst = MockData(id: "1", author: "Auther1", width: 5000, height: 333, downloadURL: "https://picsum.photos/id/0/5000/3333")
         let mockDataSecond = MockData(id: "2", author: "Auther2", width: 5000, height: 333, downloadURL: "https://picsum.photos/id/1/5000/3333")
@@ -81,5 +81,22 @@ final class NetworkManagerTests: XCTestCase {
         }
         
         await XCTestCase().fulfillment(of: [expectation], timeout: 5)
+    }
+    
+    func testFetchDataSuccess() async throws {
+        // Arrange
+        let mockDataFirst = MockData(id: "1", author: "Auther1", width: 5000, height: 333, downloadURL: "https://picsum.photos/id/0/5000/3333")
+
+        let mockdataArray = mockDataFirst
+        let mockData = try! JSONEncoder().encode(mockdataArray)
+        mockURLSession.mockData = mockData
+        let mockNetworkFetcher = MockNetworkFetcher(mockData: mockData)
+        
+        // Act
+        let resultData = try await mockNetworkFetcher.fetchData(from: APIConstants.endpoint)
+        
+        // Assert
+        XCTAssertNotNil(resultData)
+        XCTAssertEqual(resultData, mockData)
     }
 }
