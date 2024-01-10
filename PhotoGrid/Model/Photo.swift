@@ -8,8 +8,10 @@
 import Foundation
 
 struct Photo: Codable {
-    let id, author: String
-    let width, height: Int
+    let id: String
+    let author: String
+    let width: Int
+    let height: Int
     let downloadURL: String
 
     enum CodingKeys: String, CodingKey {

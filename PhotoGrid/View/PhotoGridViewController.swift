@@ -10,17 +10,8 @@ import Combine
 
 class PhotoGridViewController: UIViewController {
     
-    // MARK: - Constants
-    enum Constants {
-        static let minimumInteritemSpacing: CGFloat         = 5
-        static let imageResizePercentage: CGFloat           = 0.07
-        static let photoGridColumnCount: CGFloat             = 3
-        static let minimumLineSpacing: CGFloat                 = 5
-        static let photoWidth: CGFloat                                 = 20
-    }
-    
     // MARK: - Private Variables
-    private var photoViewModel: PhotoGridViewModel
+    private let photoViewModel: PhotoGridViewModel
     private let imageCache: ImageCache
     private lazy var collectionView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
@@ -34,6 +25,15 @@ class PhotoGridViewController: UIViewController {
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
         
         return collectionView
+    }()
+    
+    private lazy var dateLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: Constants.titleLabelFontSize)
+        label.textAlignment = .left
+        
+        return label
     }()
     
     private var cancellable = Set<AnyCancellable>()
@@ -52,11 +52,14 @@ class PhotoGridViewController: UIViewController {
     // MARK: - Lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .white
         view.addSubview(collectionView)
-        setCollectionViewConstraint()
         
+        setCollectionViewConstraint()
         setupPhotoSubsciber()
+        setupBarbuttonItem()
+        
+        dateLabel.text = photoViewModel.getTodaysDate()
         
         Task {
             await fetchAndReloadData()
@@ -66,6 +69,11 @@ class PhotoGridViewController: UIViewController {
 
 // MARK: - Private methods
 extension PhotoGridViewController {
+    
+    private func setupBarbuttonItem() {
+        let barbuttonItem = UIBarButtonItem(customView: dateLabel)
+        navigationItem.leftBarButtonItem = barbuttonItem
+    }
     
     private func setupPhotoSubsciber() {
         
@@ -164,7 +172,7 @@ extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
             
             if let downloadURL = downloadURL {
                 if let cachedImage = imageCache.image(for: downloadURL) {
-                    (collectionView.cellForItem(at: indexPath) as? PhotoCell)?.imageView.image = cachedImage
+                    (collectionView.cellForItem(at: indexPath) as? PhotoCell)?.photoGridImageView.image = cachedImage
                 } else {
                     guard visibleIndexPaths.contains(indexPath) else { continue }
                     
@@ -177,7 +185,7 @@ extension PhotoGridViewController: UICollectionViewDataSourcePrefetching {
                             DispatchQueue.main.async {
                                 if let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell,
                                    visibleIndexPaths.contains(indexPath) {
-                                    cell.imageView.image = thumbnailImage
+                                    cell.photoGridImageView.image = thumbnailImage
                                     self.imageCache.setImage(thumbnailImage!, for: downloadURL)
                                 }
                             }

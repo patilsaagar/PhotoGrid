@@ -7,32 +7,32 @@
 
 import UIKit
 
-protocol ReusableIdentifier {
+protocol ReuseIdentifier {
     static var reuseIdentifier: String { get }
 }
 
-extension ReusableIdentifier {
+extension ReuseIdentifier {
     static var reuseIdentifier: String {
         return String(describing: Self.self)
     }
 }
 
-protocol PhotoDisplayable {
+protocol PhotoDisplay {
     func display(photo: Photo) async
 }
 
-class PhotoCell: UICollectionViewCell, ReusableIdentifier {
+class PhotoCell: UICollectionViewCell, ReuseIdentifier {
     var downloadTask: URLSessionDataTask?
-    var currentURL: URL?
+    var currentPhotoID: String?
     var imageCache: ImageCache!
     
-    var imageView: UIImageView = {
-        let imageview = UIImageView()
-        imageview.clipsToBounds = true
-        imageview.contentMode = .scaleAspectFill
-        imageview.translatesAutoresizingMaskIntoConstraints = false
+    var photoGridImageView: UIImageView = {
+        let gridImageView = UIImageView()
+        gridImageView.translatesAutoresizingMaskIntoConstraints = false
+        gridImageView.contentMode = .scaleAspectFill
+        gridImageView.clipsToBounds = true
         
-        return imageview
+        return gridImageView
     }()
     
     var activityIndicator: UIActivityIndicatorView = {
@@ -45,17 +45,17 @@ class PhotoCell: UICollectionViewCell, ReusableIdentifier {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubview(imageView)
+        contentView.addSubview(photoGridImageView)
         contentView.addSubview(activityIndicator)
         
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
             activityIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+            activityIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            photoGridImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photoGridImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            photoGridImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            photoGridImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor)
         ])
         
         activityIndicator.isHidden = true
@@ -67,54 +67,64 @@ class PhotoCell: UICollectionViewCell, ReusableIdentifier {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imageView.image = nil
+        photoGridImageView.image = nil
         downloadTask?.cancel()
-        activityIndicator.isHidden = true
-        activityIndicator.stopAnimating()
+        stopActivityIndicator()
     }
 }
 
-extension PhotoCell: PhotoDisplayable {
+extension PhotoCell: PhotoDisplay {
     func display(photo: Photo) async {
         
-        imageView.image = nil
+        photoGridImageView.image = nil
         downloadTask?.cancel()
         
         if let url = URL(string: photo.downloadURL) {
-            currentURL = url
+            currentPhotoID = photo.id
             
-            activityIndicator.isHidden = false
-            activityIndicator.startAnimating()
+            startActivityIndicator()
             if let cachedImage = imageCache.image(for: url) {
-                self.imageView.image = cachedImage
+                self.photoGridImageView.image = cachedImage
                 stopActivityIndicator()
             } else {
-                do {
-                    let (data, _) = try await URLSession.shared.data(from: url)
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        if let image = UIImage(data: data),
-                           let thumbnailImage = image.resizedImage(withPercentage: 0.1) {
-                            DispatchQueue.main.async {
-                                if self.currentURL == url {
-                                    self.imageView.image = thumbnailImage
-                                    self.stopActivityIndicator()
-                                }
-                            }
-                            Task {
-                                await  self.imageCache.setImage(thumbnailImage, for: url)
-                            }
-                        }
-                    }
-                    
-                } catch  {
-                   stopActivityIndicator()
-                }
+                await displayImage(photo: photo, url: url)
             }
         }
     }
+}
+
+extension PhotoCell {
+        
+    private func startActivityIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
     
-    func stopActivityIndicator() {
+    private func stopActivityIndicator() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
+    }
+    
+    private func displayImage(photo: Photo, url: URL) async {
+        do {
+            let (data, _) = try await URLSession.shared.data(from: url)
+            DispatchQueue.global(qos: .userInitiated).async {
+                if let image = UIImage(data: data),
+                   let thumbnailImage = image.resizedImage(withPercentage: 0.1) {
+                    DispatchQueue.main.async {
+                        if self.currentPhotoID == photo.id {
+                            self.photoGridImageView.image = thumbnailImage
+                            self.stopActivityIndicator()
+                        }
+                    }
+                    Task {
+                        await  self.imageCache.setImage(thumbnailImage, for: url)
+                    }
+                }
+            }
+            
+        } catch  {
+           stopActivityIndicator()
+        }
     }
 }

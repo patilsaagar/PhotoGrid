@@ -19,7 +19,7 @@ protocol URLSessionProtocol {
 extension URLSession: URLSessionProtocol {}
 
 protocol NetworkFetchable {
-    func fetchData<T: Decodable>(from url: String) async throws -> T
+    func makeHttpRequest<T: Decodable>(from endpointURL: String) async throws -> T
 }
 
 class NetworkManager: NetworkFetchable {
@@ -30,14 +30,14 @@ class NetworkManager: NetworkFetchable {
         self.urlSession = urlSession
     }
     
-    func fetchData<T: Decodable>(from url: String) async throws -> T {
-        guard let url =  URL(string: url) else {
+    func makeHttpRequest<T: Decodable>(from endpointURL: String) async throws -> T {
+        guard let url =  URL(string: endpointURL) else {
             throw NetworkError.invalidURL
         }
         
         do {
-            let (responseData, _) = try await urlSession.data(from: url)
-                let response = try JSONDecoder().decode(T.self, from: responseData)
+            let (data, _) = try await urlSession.data(from: url)
+                let response = try JSONDecoder().decode(T.self, from: data)
                 return response
         } catch {
             throw NetworkError.jsonDecodingError(error)

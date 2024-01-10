@@ -11,15 +11,17 @@ import Combine
 class PhotoGridViewModel {
     private let networkFetcher:  NetworkFetchable
     private var photos: [Photo] = []
+    private var todaysDate: Date
     var photoPublisher = PassthroughSubject<[Photo], Error>()
 
-    init(networkFetcher: NetworkFetchable) {
+    init(networkFetcher: NetworkFetchable, todaysDate: Date = Date()) {
         self.networkFetcher = networkFetcher
+        self.todaysDate = todaysDate
     }
     
     func fetchPhotos() async {
         do {
-            photos = try await networkFetcher.fetchData(from: APIConstants.endpoint)
+            photos = try await networkFetcher.makeHttpRequest(from: APIConstants.endpoint)
             photoPublisher.send(photos)
         } catch {
             photoPublisher.send(completion: .failure(error))
@@ -32,5 +34,13 @@ class PhotoGridViewModel {
     
     func photoAtIndex(_ index: Int) -> Photo {
         return photos[index]
+    }
+    
+    func getTodaysDate() -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Constants.dateFormat
+
+        return dateFormatter.string(from: todaysDate)
     }
 }

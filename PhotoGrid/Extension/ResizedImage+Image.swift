@@ -11,7 +11,6 @@ extension UIImage {
     func resizedImage(withPercentage percentage: CGFloat) -> UIImage? {
         let imageSize = CGSize(width: size.width * percentage, height: size.height * percentage)
         UIGraphicsBeginImageContext(imageSize)
-        defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: imageSize))
         
         return UIGraphicsGetImageFromCurrentImageContext()
