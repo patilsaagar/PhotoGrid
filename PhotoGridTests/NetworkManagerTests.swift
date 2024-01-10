@@ -9,6 +9,31 @@ import XCTest
 import Combine
 @testable import PhotoGrid
 
+class MockNetworkFetcher: NetworkFetchable {
+    private var fetchDataCallCount = 0
+    private var mockData: Data
+
+    init(mockData: Data) {
+        self.mockData = mockData
+    }
+    
+    func makeHttpRequest<T: Decodable>(from url: String) async throws -> T {
+        fetchDataCallCount += 1
+
+        let decodedData = try JSONDecoder().decode(T.self, from: mockData)
+        
+        return decodedData
+    }
+    
+    func getFetchDataCallCount() -> Int {
+        return fetchDataCallCount
+    }
+    
+    func fetchData(from endpointURL: String) async throws -> Data {
+        return mockData
+    }
+}
+
 class MockURLSession: URLSessionProtocol {
     
     var mockData: Data?
@@ -40,11 +65,21 @@ final class NetworkManagerTests: XCTestCase {
         let mockdataArray = [mockDataFirst, mockDataSecond]
         let data = try! JSONEncoder().encode(mockdataArray)
         mockURLSession.mockData = data
+        let expectation = expectation(description: "Data fetched successfully")
         
         // Act
-        let receivedData:[MockData] =  try await networkManager.makeHttpRequest(from: APIConstants.endpoint)
+        Task {
+            do {
+                let receivedData:[MockData] =  try await networkManager.makeHttpRequest(from: APIConstants.endpoint)
+                
+                // Assert
+                XCTAssertEqual(receivedData.count, 2)
+                expectation.fulfill()
+            } catch {
+                XCTFail()
+            }
+        }
         
-        // Assert
-        XCTAssertEqual(receivedData.count, 2)
+        await XCTestCase().fulfillment(of: [expectation], timeout: 5)
     }
 }

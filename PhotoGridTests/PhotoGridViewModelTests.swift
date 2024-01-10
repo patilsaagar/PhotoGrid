@@ -20,28 +20,6 @@ struct MockData: Codable {
     }
 }
 
-class MockNetworkFetcher: NetworkFetchable {
-    
-    private var fetchDataCallCount = 0
-    private var mockData: Data
-
-    init(mockData: Data) {
-        self.mockData = mockData
-    }
-    
-    func makeHttpRequest<T: Decodable>(from url: String) async throws -> T {
-        fetchDataCallCount += 1
-
-        let decodedData = try JSONDecoder().decode(T.self, from: mockData)
-        
-        return decodedData
-    }
-    
-    func getFetchDataCallCount() -> Int {
-        return fetchDataCallCount
-    }
-}
-
 final class PhotoGridViewModelTests: XCTestCase {
 
     private var fetchDataCallCount = 0
