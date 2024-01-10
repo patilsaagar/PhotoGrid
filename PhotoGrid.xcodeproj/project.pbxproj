@@ -63,6 +63,7 @@
 		58A82C422B4E69830097E5EA /* NetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTests.swift; sourceTree = "<group>"; };
 		58A82C442B4E79BF0097E5EA /* ImageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTests.swift; sourceTree = "<group>"; };
 		58A82C492B4EC0070097E5EA /* PhotoGridViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewControllerTests.swift; sourceTree = "<group>"; };
+		58A82C4B2B4EE0890097E5EA /* PhotoGridUITests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PhotoGridUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +142,7 @@
 		58A82C162B4DA8840097E5EA /* PhotoGridUITests */ = {
 			isa = PBXGroup;
 			children = (
+				58A82C4B2B4EE0890097E5EA /* PhotoGridUITests-Bridging-Header.h */,
 				58A82C492B4EC0070097E5EA /* PhotoGridViewControllerTests.swift */,
 			);
 			path = PhotoGridUITests;
