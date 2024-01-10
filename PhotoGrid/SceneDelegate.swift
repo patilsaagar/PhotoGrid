@@ -17,8 +17,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let window = UIWindow(windowScene: windowScene)
-        let photoGridViewController = PhotoGridViewController()
-        window.rootViewController = photoGridViewController
+        let networkManager = NetworkManager(urlSession: URLSession.shared)
+        let photoViewModel = PhotoGridViewModel(networkFetcher: networkManager)
+        let imageCache = ImageCache()
+        let photoGridViewController = PhotoGridViewController(photoViewModel: photoViewModel, imageCache: imageCache)
+        
+        let navigationController = UINavigationController(rootViewController: photoGridViewController)
+        window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
     }
