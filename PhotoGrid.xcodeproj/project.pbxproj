@@ -12,8 +12,6 @@
 		58A82BFB2B4DA8820097E5EA /* PhotoGridViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82BFA2B4DA8820097E5EA /* PhotoGridViewController.swift */; };
 		58A82C002B4DA8830097E5EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58A82BFF2B4DA8830097E5EA /* Assets.xcassets */; };
 		58A82C0E2B4DA8840097E5EA /* PhotoGridTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C0D2B4DA8840097E5EA /* PhotoGridTests.swift */; };
-		58A82C182B4DA8840097E5EA /* PhotoGridUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */; };
-		58A82C1A2B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */; };
 		58A82C2C2B4DA9D70097E5EA /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C2B2B4DA9D70097E5EA /* Photo.swift */; };
 		58A82C2F2B4DAA020097E5EA /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C2E2B4DAA020097E5EA /* NetworkManager.swift */; };
 		58A82C322B4DAA2D0097E5EA /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C312B4DAA2D0097E5EA /* Constants.swift */; };
@@ -25,6 +23,7 @@
 		58A82C412B4E56D00097E5EA /* PhotoGridViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C402B4E56D00097E5EA /* PhotoGridViewModelTests.swift */; };
 		58A82C432B4E69830097E5EA /* NetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C422B4E69830097E5EA /* NetworkManagerTests.swift */; };
 		58A82C452B4E79BF0097E5EA /* ImageCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C442B4E79BF0097E5EA /* ImageCacheTests.swift */; };
+		58A82C4A2B4EC0070097E5EA /* PhotoGridViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A82C492B4EC0070097E5EA /* PhotoGridViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +53,6 @@
 		58A82C092B4DA8840097E5EA /* PhotoGridTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoGridTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A82C0D2B4DA8840097E5EA /* PhotoGridTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridTests.swift; sourceTree = "<group>"; };
 		58A82C132B4DA8840097E5EA /* PhotoGridUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PhotoGridUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridUITests.swift; sourceTree = "<group>"; };
-		58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		58A82C2B2B4DA9D70097E5EA /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		58A82C2E2B4DAA020097E5EA /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		58A82C312B4DAA2D0097E5EA /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -67,6 +64,7 @@
 		58A82C402B4E56D00097E5EA /* PhotoGridViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewModelTests.swift; sourceTree = "<group>"; };
 		58A82C422B4E69830097E5EA /* NetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManagerTests.swift; sourceTree = "<group>"; };
 		58A82C442B4E79BF0097E5EA /* ImageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheTests.swift; sourceTree = "<group>"; };
+		58A82C492B4EC0070097E5EA /* PhotoGridViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGridViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,8 +144,7 @@
 		58A82C162B4DA8840097E5EA /* PhotoGridUITests */ = {
 			isa = PBXGroup;
 			children = (
-				58A82C172B4DA8840097E5EA /* PhotoGridUITests.swift */,
-				58A82C192B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift */,
+				58A82C492B4EC0070097E5EA /* PhotoGridViewControllerTests.swift */,
 			);
 			path = PhotoGridUITests;
 			sourceTree = "<group>";
@@ -293,6 +290,7 @@
 					};
 					58A82C122B4DA8840097E5EA = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 						TestTargetID = 58A82BF22B4DA8820097E5EA;
 					};
 				};
@@ -376,8 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				58A82C182B4DA8840097E5EA /* PhotoGridUITests.swift in Sources */,
-				58A82C1A2B4DA8840097E5EA /* PhotoGridUITestsLaunchTests.swift in Sources */,
+				58A82C4A2B4EC0070097E5EA /* PhotoGridViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +611,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2ZNF4H4989;
@@ -622,6 +620,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sandbox.PhotoGridUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoGridUITests/PhotoGridUITests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PhotoGrid;
@@ -632,6 +632,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2ZNF4H4989;
@@ -640,6 +641,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sandbox.PhotoGridUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "PhotoGridUITests/PhotoGridUITests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PhotoGrid;
