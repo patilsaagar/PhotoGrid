@@ -22,6 +22,7 @@ class PhotoGridViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.prefetchDataSource = self
         collectionView.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.reuseIdentifier)
         
         return collectionView
@@ -135,7 +136,7 @@ extension PhotoGridViewController: UICollectionViewDataSource {
         let photo = photoViewModel.photoAtIndex(indexPath.row)
         
         Task {
-            await photoCell.display(photo: photo)
+            await photoCell.configureCell(photo: photo)
         }
         return photoCell
     }

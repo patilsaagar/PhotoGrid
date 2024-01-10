@@ -18,7 +18,7 @@ extension ReuseIdentifier {
 }
 
 protocol PhotoDisplay {
-    func display(photo: Photo) async
+    func configureCell(photo: Photo) async
 }
 
 class PhotoCell: UICollectionViewCell, ReuseIdentifier {
@@ -74,7 +74,7 @@ class PhotoCell: UICollectionViewCell, ReuseIdentifier {
 }
 
 extension PhotoCell: PhotoDisplay {
-    func display(photo: Photo) async {
+    func configureCell(photo: Photo) async {
         
         photoGridImageView.image = nil
         downloadTask?.cancel()
