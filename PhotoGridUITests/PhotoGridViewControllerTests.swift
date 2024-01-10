@@ -9,7 +9,7 @@ import XCTest
 
 final class PhotoGridViewControllerTests: XCTestCase {
     
-    let app = XCUIApplication()
+    private let app = XCUIApplication()
     
     // MARK: Setup
     override func setUp() {
