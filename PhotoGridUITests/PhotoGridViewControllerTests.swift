@@ -20,10 +20,10 @@ final class PhotoGridViewControllerTests: XCTestCase {
     
     func test_PhotoGridView_OnAppear_ShouldLoadUIElements() {
         
-        // ACT
+        // Act
         let collectionView = app.collectionViews.firstMatch
         
-        // ASSERT
+        // Assert
         XCTAssertTrue(collectionView.exists)
         XCTAssertTrue(collectionView.waitForExistence(timeout: 5))
         XCTAssertTrue(collectionView.cells.count > 0)
@@ -31,12 +31,12 @@ final class PhotoGridViewControllerTests: XCTestCase {
     
     func test_PhotoGridView_OnTapOfAnyImage_ShouldNavigatwToFullImageScreen() {
         
-        // ACT
+        // Arrange
         let collectionView = app.collectionViews.firstMatch
         XCTAssertTrue(collectionView.waitForExistence(timeout: 10))
-
-        // ACT
         let imageToBeTapIndex = 11
+
+        // Act
         let tappedImage = collectionView.children(matching: .cell).element(boundBy: imageToBeTapIndex)
         
         XCTAssertTrue(tappedImage.waitForExistence(timeout: 10))
