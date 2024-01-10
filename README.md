@@ -5,6 +5,7 @@ iOS Photo App Replica
 
 * Xcode version 15.0.1
 * iOS Simulator
+* iOS 17
 
 ## Technology Used
 
