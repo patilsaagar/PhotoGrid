@@ -94,7 +94,7 @@ extension PhotoCell: PhotoDisplay {
                 let fetchedImageData = try await networkFetcher.fetchData(from: photo.downloadURL)
                 
                 if let image = UIImage(data: fetchedImageData),
-                   let thumbnailImage = image.resizedImage(withPercentage: 0.1) {
+                   let thumbnailImage = image.resizedImage(withPercentage: NumberConstants.imageResizePercentage) {
 
                     await MainActor.run {
                         guard self.currentPhotoID == photo.id else { return }
